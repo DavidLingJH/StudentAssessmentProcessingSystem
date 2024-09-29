@@ -1,21 +1,24 @@
-20,,,
-Maria,F,26,160,55,Badminton,Bronze
-James,M,18,165,65,Badminton,Gold
-Samara,F,23,165,65,Badminton,Gold
-Jakub,M,22,170,75,Gymnastics,Gold
-Shah,M,23,170,80,Gymnastics,Silver
-Joylin,F,25,170,60,Badminton,Silver
-Robert,M,21,172,55,Judo,Silver
-Chong,M,25,174,65,Judo,Silver
-Hayley,F,21,175,60,Basketball,Gold
-Ali,M,23,175,75,Judo,Gold
-Travis,M,24,175,85,Gymnastics,Gold
-Tamir,M,25,175,85,Judo,Gold
-Alex,M,19,180,65,Swimming,Silver
-Lim,F,20,180,70,Swimming,Bronze
-Chloe,F,22,180,75,Basketball,Bronze
-Karen,F,24,180,70,Basketball,Bronze
-David,M,22,185,60,Basketball,Bronze
-Lynn,F,24,185,70,Swimming,Bronze
-Sofia,F,24,185,75,Basketball,Silver
-Sarah,F,24,185,80,Basketball,Silver
+1
+F28PA SDA 2024 4 10
+20 15 15 50
+20 30 100 100
+ABC1234 Thomas
+18 22 68 81
+BCA2134 Jennie
+15 20 85 60
+BBB1111 Robert
+10 12 45 35
+AAA2121 Andrew
+15 15 15 15
+CCC3124 John
+20 28 88 82
+ACB1234 Alex
+16 15 64 41
+BBB2321 Andrea
+12 18 63 71
+ABC4321 Phillips
+17 20 71 58
+CBB1214 Zachary
+11 12 37 38
+ABA2314 Lisa
+12 17 68 72
