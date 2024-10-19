@@ -14,7 +14,7 @@ public class Student {
 	private String name;
 	
 	public Student(String id, String name) {
-		studentID = id;
+		this.studentID = id;
 		this.name = name;
 	}
 	
