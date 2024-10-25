@@ -19,7 +19,13 @@ public class AssessmentRecord {
 	public AssessmentRecord(Student std, Course course, int na, double[] marks) {
 		this.student = std;
 		this.course = course;
-		this.marks = marks;
+		
+		this.marks = new double[na];
+		for (int i = 0; i < marks.length; i++) {
+			this.marks[i] = marks[i];
+		}
+		
+//		this.marks = marks.clone();
 	}
 	
 	public void setFinalMark() {
@@ -30,8 +36,6 @@ public class AssessmentRecord {
 		for (int i = 0; i < marks.length; i++) {
 			finalMark += (marks[i] / maxMarks[i]) * weights[i];
 		}
-		
-		finalMark = Double.parseDouble(String.format("%.2f", finalMark));
 	}
 	
 	public void setGrade() {
@@ -52,10 +56,10 @@ public class AssessmentRecord {
 	
 	//getters
 	public double getFinalMark() {
-		return finalMark;
+		return this.finalMark;
 	}
 	
 	public double getGrade() {
-		return grade;
+		return this.grade;
 	}
 }

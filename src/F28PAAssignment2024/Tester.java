@@ -18,15 +18,12 @@ import java.util.Scanner;
  */
 
 public class Tester {
-	public static ArrayList<Course> readInput(String inputFile) throws IOException, InvalidMarkException{
-		ArrayList<Course> courses = new ArrayList<>();
-		ArrayList<Student> students = new ArrayList<>();
-	
-		File f1 = new File(inputFile + ".txt");
+	public static void readInput(String inputFile, ArrayList<Course> courses, ArrayList<Student> students) throws IOException, InvalidMarkException{		
+		File f1 = new File(inputFile);
 		try (Scanner input = new Scanner(f1)){
 			int numOfCourses = input.nextInt();
 			
-			for (int h = 0; h < numOfCourses; h++) {
+			for (int i = 0; i < numOfCourses; i++) {
 				//Read course details
 				String cID = input.next();
 				String name = input.next();
@@ -43,15 +40,14 @@ public class Tester {
 				
 				
 				//Read student details
-				for (int i = 0; i < ns; i++) {
+				for (int j = 0; j < ns; j++) {
 					String studentID = input.next();
 					String studentName = input.next();
 					input.nextLine();
 					
 					double[] marks = parseMarks(input.nextLine(), studentID);
-										
-					Student s1 = new Student(studentID, studentName);
-					students.add(s1);
+								
+					Student s1 = findOrCreateStudent(studentID, studentName, students);
 					
 					AssessmentRecord ar1 = new AssessmentRecord(s1, c1, na, marks);
 					ar1.setFinalMark();
@@ -63,14 +59,12 @@ public class Tester {
 			input.close();
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found: " + inputFile + ".txt");
+			System.out.println("File not found: " + inputFile);
 		} catch (InputMismatchException e) {
 			System.out.println("Input mismatch: Incorrect data format in txt file");
 		} catch (NoSuchElementException e) {
 			System.out.println("No such element: The file is incomplete and lack certain data");
 		} 
-		
-		return courses;
 	}
 	
 	public static double[] parseDoubleFromStringArray(String line) {
@@ -95,14 +89,26 @@ public class Tester {
 		return marks;
 	}
 	
-	public static void printReport(ArrayList<Course> courses) {
+	public static Student findOrCreateStudent(String studentID, String studentName, ArrayList<Student> students) {
+		for (Student student : students) {
+			if (studentID.equals(student.getId())) {
+				return student;
+			}
+		}
+		
+		Student newStudent = new Student(studentID, studentName);
+		students.add(newStudent);
+		return newStudent;
+	}
+	
+	public static void printReport(ArrayList<Course> courses, ArrayList<Student> students) {
 		for (Course oneCourse : courses) {
 			System.out.println("CourseID: " + oneCourse.getCourseID());
 			System.out.println("Name: " + oneCourse.getCourseName());
 			System.out.println("Year: " + oneCourse.getYear());
-			System.out.printf("Minimum Final Mark: %.2f%%%n", oneCourse.getMin());
-			System.out.printf("Maximum Final Mark: %.2f%%%n", oneCourse.getMax());
-			System.out.printf("Average Final Mark: %.2f%%%n", oneCourse.getMean());
+			System.out.printf("Minimum Final Mark: %.2f%n", oneCourse.getMin());
+			System.out.printf("Maximum Final Mark: %.2f%n", oneCourse.getMax());
+			System.out.printf("Average Final Mark: %.2f%n", oneCourse.getMean());
 			System.out.println("Number of students: " + oneCourse.getNumOfStudents());
 			System.out.printf("Pass rate: %.2f%%%n", oneCourse.getPassRate());
 			System.out.printf("A: %.2f%%  ", oneCourse.getGradePercentage('A'));
@@ -116,23 +122,23 @@ public class Tester {
 		}
 	}
 	
-    public static void main(String[] args){
-    	Scanner input = new Scanner(System.in);
-    	String inputFile = "";
-    	
-    	System.out.println("Please input the name of the file that you plan on obtaining data from (Without.txt):");
-    	inputFile = input.nextLine();
+    public static void main(String[] args){   
+    	ArrayList<Course> courses = new ArrayList<Course>();
+    	ArrayList<Student> students = new ArrayList<Student>();
     	
     	try {
-			ArrayList<Course> courses = readInput(inputFile);
-			printReport(courses);
+    		if (args.length != 1) {
+    			System.out.println("Error: Invalid Argument");
+    		}
+    	
+    		String inputFile = args[0];
+    		readInput(inputFile, courses, students);
+			printReport(courses, students);
+			
 		} catch (IOException e) {
 			System.out.println("Error reading the file: " + e.getMessage());
 		} catch (InvalidMarkException e) {
 			System.out.println("Error: " + e.getMessage());
-		} finally {
-			input.close();			
 		}
-    	
     }
 }

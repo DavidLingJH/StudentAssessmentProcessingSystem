@@ -19,7 +19,7 @@ public class Course {
 	private int numOfStudents;
 	private double[] weights;
 	private double[] maxMarks;
-	private ArrayList<AssessmentRecord> assessmentResult = new ArrayList<>(); 
+	private ArrayList<AssessmentRecord> assessmentResult; 
 	
 	public Course(String cID, String name, int year, int na, int ns, double[] weights, double[] max) {
 		this.courseID = cID;
@@ -29,6 +29,7 @@ public class Course {
 		this.numOfStudents = ns;
 		this.weights = weights;
 		this.maxMarks = max;
+		this.assessmentResult = new ArrayList<>();
 	}
 	
 	public double getMean() {
@@ -96,11 +97,11 @@ public class Course {
 	
 	//getters and setters
 	public double[] getWeights() {
-		return weights;
+		return this.weights;
 	}
 	
 	public double[] getMaxMarks() {
-		return maxMarks;
+		return this.maxMarks;
 	}
 	
 	public void setAssessmentResult(AssessmentRecord record) {
