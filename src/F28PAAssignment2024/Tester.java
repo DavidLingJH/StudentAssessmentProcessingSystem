@@ -33,8 +33,8 @@ public class Tester {
 				input.nextLine();
 				
 				//Split the String line into specific double of an array(weights and max)
-				double[] weights = parseDoubleFromStringArray(input.nextLine());
-				double[] max = parseDoubleFromStringArray(input.nextLine());
+				double[] weights = parseDoubleFromStringArray(input.nextLine(), true);
+				double[] max = parseDoubleFromStringArray(input.nextLine(), false);
 				
 				Course c1 = new Course(cID, name, year, na, ns, weights, max);
 				courses.add(c1);
@@ -65,15 +65,27 @@ public class Tester {
 		} 
 	}
 	
-	public static double[] parseDoubleFromStringArray(String line) throws InvalidMarkException{
+	public static double[] parseDoubleFromStringArray(String line, boolean isWeights) throws InvalidMarkException{
 		String[] parts = line.trim().split("\\s+");
 		double[] result = new double[parts.length];
+		double sum = 0.0;
+		
 		for (int i = 0; i < parts.length; i++) {
-			if(Double.parseDouble(parts[i]) <= 0 || Double.parseDouble(parts[i]) > 100) {
+			result[i] = Double.parseDouble(parts[i]);
+			
+			if(result[i] < 0 || result[i] > 100) {
 				throw new InvalidMarkException("The weights/maximum marks are not between 0 and 100");
 			}
-            result[i] = Double.parseDouble(parts[i]);
+			
+			if(isWeights) {
+				sum += result[i];
+			}
         }
+		
+		if(isWeights && sum != 100) {
+			throw new InvalidMarkException("The total weights do not add up to 100. Current total: " + sum);
+		}
+		
 		return result;
 	}
 	
