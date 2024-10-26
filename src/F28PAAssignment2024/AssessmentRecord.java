@@ -27,13 +27,17 @@ public class AssessmentRecord {
 		}
 	}
 	
-	public void setFinalMark() {
+	public void setFinalMark() throws InvalidMarkException{
 		finalMark = 0;
 		double[] weights = course.getWeights();
 		double[] maxMarks = course.getMaxMarks();
 		
 		for (int i = 0; i < marks.length; i++) {
 			finalMark += (marks[i] / maxMarks[i]) * weights[i];
+		}
+		
+		if(finalMark < 0 || finalMark > 100) {
+			throw new InvalidMarkException("Input error: Final marks exceed boundary");
 		}
 	}
 	
