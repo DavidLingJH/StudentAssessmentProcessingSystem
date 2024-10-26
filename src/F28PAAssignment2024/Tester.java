@@ -18,7 +18,7 @@ import java.util.Scanner;
  */
 
 public class Tester {
-	public static void readInput(String inputFile, ArrayList<Course> courses, ArrayList<Student> students) throws IOException, InvalidMarkException{		
+	public static void readInput(String inputFile, ArrayList<Course> courses, ArrayList<Student> students) throws InvalidMarkException, FileNotFoundException, NoSuchElementException{		
 		File f1 = new File(inputFile);
 		try (Scanner input = new Scanner(f1)){
 			int numOfCourses = input.nextInt();
@@ -32,12 +32,12 @@ public class Tester {
 				int ns = input.nextInt();
 				input.nextLine();
 				
+				//Split the String line into specific double of an array(weights and max)
 				double[] weights = parseDoubleFromStringArray(input.nextLine());
 				double[] max = parseDoubleFromStringArray(input.nextLine());
 				
 				Course c1 = new Course(cID, name, year, na, ns, weights, max);
 				courses.add(c1);
-				
 				
 				//Read student details
 				for (int j = 0; j < ns; j++) {
@@ -45,7 +45,7 @@ public class Tester {
 					String studentName = input.next();
 					input.nextLine();
 					
-					double[] marks = parseMarks(input.nextLine(), studentID);
+					double[] marks = parseMarks(input.nextLine(), studentID, max, name);
 								
 					Student s1 = findOrCreateStudent(studentID, studentName, students);
 					
@@ -59,29 +59,47 @@ public class Tester {
 			input.close();
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found: " + inputFile);
-		} catch (InputMismatchException e) {
-			System.out.println("Input mismatch: Incorrect data format in txt file");
+			throw new FileNotFoundException("File not found: " + inputFile);
 		} catch (NoSuchElementException e) {
-			System.out.println("No such element: The file is incomplete and lack certain data");
+			throw new NoSuchElementException("No such element: The file is incomplete and lack certain data");
 		} 
 	}
 	
-	public static double[] parseDoubleFromStringArray(String line) {
+	public static double[] parseDoubleFromStringArray(String line) throws InvalidMarkException{
 		String[] parts = line.trim().split("\\s+");
 		double[] result = new double[parts.length];
 		for (int i = 0; i < parts.length; i++) {
+			if(Double.parseDouble(parts[i]) <= 0 || Double.parseDouble(parts[i]) > 100) {
+				throw new InvalidMarkException("The weights/maximum marks are not between 0 and 100");
+			}
             result[i] = Double.parseDouble(parts[i]);
         }
 		return result;
 	}
 	
-	public static double[] parseMarks(String line, String studentID) throws InvalidMarkException{
+	public static double[] parseMarks(String line, String studentID, double[] maxMarks, String courseName) throws InvalidMarkException{
 		String[] markStringArray = line.trim().split("\\s+");
+		
+	    if (markStringArray.length != maxMarks.length) {
+	        throw new InvalidMarkException("Invalid number of marks for student " + studentID + " in course " + courseName + 
+	                                       ":\nExpected: " + maxMarks.length + "\nReceived: " + markStringArray.length);
+	    }
+		
 		double[] marks = new double[markStringArray.length];
+		
 		for (int i = 0; i < markStringArray.length; i++) {
             try {
             	marks[i] = Double.parseDouble(markStringArray[i]);
+            	
+            	if (marks[i] < 0) {
+            		throw new InvalidMarkException("Invalid mark for student " + studentID + ": " + marks[i]);
+            	}
+            	
+            	//Compare marks to prevent marks > maxMarks
+            	if(marks[i] > maxMarks[i]) {
+            		throw new InvalidMarkException("Invalid mark for student " + studentID + ": " + marks[i] + "\nThe mark exceeds the maximum mark of " + maxMarks[i] + " for assessment " + (i+1) + " for course " + courseName);
+            	}
+            	
             } catch(NumberFormatException e) {
             	throw new InvalidMarkException("Invalid mark for student " + studentID + ": " + markStringArray[i]);
             }
@@ -134,11 +152,9 @@ public class Tester {
     		String inputFile = args[0];
     		readInput(inputFile, courses, students);
 			printReport(courses, students);
-			
-		} catch (IOException e) {
-			System.out.println("Error reading the file: " + e.getMessage());
-		} catch (InvalidMarkException e) {
-			System.out.println("Error: " + e.getMessage());
+		
+		} catch (InvalidMarkException | FileNotFoundException | NoSuchElementException e) {
+			System.out.println(e.getMessage());
 		}
     }
 }

@@ -27,8 +27,18 @@ public class Course {
 		this.year = year;
 		this.numOfAssessment = na;
 		this.numOfStudents = ns;
-		this.weights = weights;
-		this.maxMarks = max;
+		
+		//Deepcopy
+		this.weights = new double[na];
+		for(int i = 0; i < weights.length; i++) {
+			this.weights[i] = weights[i];
+		}
+		
+		this.maxMarks = new double[na];
+		for(int i = 0; i < max.length; i++) {
+			this.maxMarks[i] = max[i];
+		}
+		
 		this.assessmentResult = new ArrayList<>();
 	}
 	
@@ -40,7 +50,6 @@ public class Course {
 		}
 		
 		return (sum / numOfStudents);
-		
 	}
 	
 	public double getMin() {

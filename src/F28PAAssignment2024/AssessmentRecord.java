@@ -19,13 +19,12 @@ public class AssessmentRecord {
 	public AssessmentRecord(Student std, Course course, int na, double[] marks) {
 		this.student = std;
 		this.course = course;
-		
+
+		//Deepcopy of marks
 		this.marks = new double[na];
 		for (int i = 0; i < marks.length; i++) {
 			this.marks[i] = marks[i];
 		}
-		
-//		this.marks = marks.clone();
 	}
 	
 	public void setFinalMark() {
