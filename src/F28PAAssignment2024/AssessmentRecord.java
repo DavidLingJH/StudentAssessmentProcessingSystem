@@ -1,11 +1,6 @@
 package F28PAAssignment2024;
 
 /**
- * F28PA | Software Development A | Coursework
- * 
- * The Coursework specification is provided in Canvas. Please read through it in
- * full before you start work.
- * 
  * @author DAVID LING JIA HAO
  */
 
@@ -15,32 +10,32 @@ public class AssessmentRecord {
 	private double[] marks;
 	private double finalMark;
 	private char grade;
-	
+
 	public AssessmentRecord(Student std, Course course, int na, double[] marks) {
 		this.student = std;
 		this.course = course;
 
-		//Deepcopy of marks
+		// Deepcopy of marks
 		this.marks = new double[na];
 		for (int i = 0; i < marks.length; i++) {
 			this.marks[i] = marks[i];
 		}
 	}
-	
-	public void setFinalMark() throws InvalidMarkException{
+
+	public void setFinalMark() throws InvalidMarkException {
 		finalMark = 0;
 		double[] weights = course.getWeights();
 		double[] maxMarks = course.getMaxMarks();
-		
+
 		for (int i = 0; i < marks.length; i++) {
 			finalMark += (marks[i] / maxMarks[i]) * weights[i];
 		}
-		
-		if(finalMark < 0 || finalMark > 100) {
+
+		if (finalMark < 0 || finalMark > 100) {
 			throw new InvalidMarkException("Input error: Final marks exceed boundary");
 		}
 	}
-	
+
 	public void setGrade() {
 		if (finalMark >= 70) {
 			grade = 'A';
@@ -56,12 +51,12 @@ public class AssessmentRecord {
 			grade = 'F';
 		}
 	}
-	
-	//getters
+
+	// getters
 	public double getFinalMark() {
 		return this.finalMark;
 	}
-	
+
 	public double getGrade() {
 		return this.grade;
 	}
